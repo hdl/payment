@@ -27,7 +27,7 @@ def paypal_webhook():
     #probably should have a sanity check here on the size of the form data to guard against DoS attacks
     received_args = chain(request.form.iteritems(), IPN_VERIFY_EXTRA_PARAMS)
     print "xxxxxxxxx"
-    print verify_args
+    print received_args
     verify_string = '&'.join(('%s=%s' % (param, value) for param, value in received_args))
     #req = Request(verify_string)
     response = urlopen(IPN_URLSTRING, data=verify_string)
