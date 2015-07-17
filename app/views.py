@@ -30,7 +30,7 @@ def paypal_webhook():
     verify_string = '&'.join(('%s=%s' % (param, value) for param, value in received_args))
     print verify_string
     print urlencode(IPN_URLSTRING+'?'+verify_string)
-    response = urlopen(urlencode(IPN_URLSTRING+'?'+verify_string))
+    response = urlopen(IPN_URLSTRING+'?'+verify_string.replace(' ', '+'))
     #response = urlopen(IPN_URLSTRING+'?'+verify_string)
     status = response.read()
     print "status is %s"%status
