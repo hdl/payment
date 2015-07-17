@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, make_response, render_template, flash, redirect, session, url_for, request, g
+from flask import Flask, make_response, render_template, flash, redirect, session, url_for, request, g, jsonify
 from app import app
 from urllib import urlopen
 
