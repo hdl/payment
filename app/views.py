@@ -23,10 +23,12 @@ def ordered_storage(f):
 @app.route('/paypal/', methods=['POST'])
 @ordered_storage
 def paypal_webhook():
-    print "xxxxxxxxx"
+    
     #probably should have a sanity check here on the size of the form data to guard against DoS attacks
-    verify_args = chain(request.form.iteritems(), IPN_VERIFY_EXTRA_PARAMS)
-    verify_string = '&'.join(('%s=%s' % (param, value) for param, value in verify_args))
+    received_args = chain(request.form.iteritems(), IPN_VERIFY_EXTRA_PARAMS)
+    print "xxxxxxxxx"
+    print verify_args
+    verify_string = '&'.join(('%s=%s' % (param, value) for param, value in received_args))
     #req = Request(verify_string)
     response = urlopen(IPN_URLSTRING, data=verify_string)
     status = response.read()
@@ -37,6 +39,6 @@ def paypal_webhook():
         payer_email =  request.form.get('payer_email')
         print "Pulled {email} from transaction".format(email=payer_email)
     else:
-         print 'Paypal IPN string {arg} did not validate'.format(arg=verify_string)
+         print 'Paypal IPN string did not validate:\n {arg}'.format(arg=verify_string)
 
     return jsonify({'status':'complete'})
