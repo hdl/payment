@@ -26,11 +26,10 @@ def paypal_webhook():
     
     #probably should have a sanity check here on the size of the form data to guard against DoS attacks
     received_args = chain(IPN_VERIFY_EXTRA_PARAMS, request.form.iteritems())
-    print received_args
+    print request.form
     verify_string = '&'.join(('%s=%s' % (param, value) for param, value in received_args))
-    #req = Request(verify_string)
-
-    response = urlopen(IPN_URLSTRING+'?'+verify_string)
+    print verify_string
+    response = urlopen(IPN_URLSTRING, data=verify_string)
     status = response.read()
     print "status is %s"%status
     if status == 'VERIFIED':
@@ -39,6 +38,6 @@ def paypal_webhook():
         payer_email =  request.form.get('payer_email')
         print "Pulled {email} from transaction".format(email=payer_email)
     else:
-        print 'Paypal IPN string did not validate:\n{arg}'.format(arg=verify_string)
+        print 'Paypal IPN string did not validate'
 
     return jsonify({'status':'complete'})
