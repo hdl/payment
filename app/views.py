@@ -29,8 +29,8 @@ def paypal_webhook():
     print request.form
     verify_string = '&'.join(('%s=%s' % (param, value) for param, value in received_args))
     print verify_string
-    #response = urlopen(IPN_URLSTRING, data=verify_string)
-    response = urlopen(IPN_URLSTRING+'?'+verify_string)
+    response = urlopen(IPN_URLSTRING, data=verify_string)
+    #response = urlopen(IPN_URLSTRING+'?'+verify_string)
     status = response.read()
     print "status is %s"%status
     if status == 'VERIFIED':
