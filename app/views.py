@@ -2,7 +2,7 @@
 
 from flask import Flask, make_response, render_template, flash, redirect, session, url_for, request, g, jsonify
 from app import app
-from urllib import urlopen
+from urllib import urlopen, urlencode
 
 from itertools import chain
 IPN_URLSTRING = 'https://www.sandbox.paypal.com/cgi-bin/webscr'
@@ -25,11 +25,12 @@ def ordered_storage(f):
 def paypal_webhook():
     
     #probably should have a sanity check here on the size of the form data to guard against DoS attacks
-    received_args = chain(request.form.iteritems(), IPN_VERIFY_EXTRA_PARAMS)
+    received_args = chain(IPN_VERIFY_EXTRA_PARAMS, request.form.iteritems())
     print request.form
     verify_string = '&'.join(('%s=%s' % (param, value) for param, value in received_args))
     print verify_string
-    response = urlopen(IPN_URLSTRING, data=verify_string)
+    print urlencode(IPN_URLSTRING+'?'+verify_string)
+    response = urlopen(urlencode(IPN_URLSTRING+'?'+verify_string))
     #response = urlopen(IPN_URLSTRING+'?'+verify_string)
     status = response.read()
     print "status is %s"%status
