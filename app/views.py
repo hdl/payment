@@ -2,7 +2,7 @@
 
 from flask import Flask, make_response, render_template, flash, redirect, session, url_for, request, g
 from app import app
-from urllib.request import urlopen
+from urllib import urlopen
 
 from itertools import chain
 IPN_URLSTRING = 'https://www.sandbox.paypal.com/cgi-bin/webscr'
