@@ -29,7 +29,8 @@ def paypal_webhook():
     print received_args
     verify_string = '&'.join(('%s=%s' % (param, value) for param, value in received_args))
     #req = Request(verify_string)
-    response = urlopen(IPN_URLSTRING, data=verify_string[1:])
+
+    response = urlopen(IPN_URLSTRING+'?'+verify_string)
     status = response.read()
     print "status is %s"%status
     if status == 'VERIFIED':
@@ -38,6 +39,6 @@ def paypal_webhook():
         payer_email =  request.form.get('payer_email')
         print "Pulled {email} from transaction".format(email=payer_email)
     else:
-        print 'Paypal IPN string did not validate:\n {arg}'.format(arg=verify_string)
+        print 'Paypal IPN string did not validate:\n{arg}'.format(arg=verify_string)
 
     return jsonify({'status':'complete'})
