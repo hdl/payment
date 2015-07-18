@@ -3,6 +3,7 @@
 from flask import Flask, make_response, render_template, flash, redirect, session, url_for, request, g, jsonify
 from app import app
 from urllib import urlopen, urlencode
+import requests
 
 from itertools import chain
 IPN_URLSTRING = 'https://www.sandbox.paypal.com/cgi-bin/webscr'
@@ -29,8 +30,8 @@ def paypal_webhook():
     print request.form
     verify_string = '&'.join(('%s=%s' % (param, urllib.quote(value.decode('string_escape'))) for param, value in received_args))
     print verify_string
-    print urlencode(IPN_URLSTRING+'?'+verify_string)
-    response = urlopen(IPN_URLSTRING+'?'+verify_string.replace(' ', '+'))
+    
+    response = requests.post(IPN_URLSTRING, data=verify_string)
     #response = urlopen(IPN_URLSTRING+'?'+verify_string)
     status = response.read()
     print "status is %s"%status
